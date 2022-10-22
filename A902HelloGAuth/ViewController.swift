@@ -12,10 +12,31 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        Auth.auth().signInAnonymously()
-        
+        Auth.auth().addStateDidChangeListener { auth, user in
+            if user == nil{
+                print("登出")
+            }else{
+                print(auth.currentUser?.uid)
+            }
+        }
     }
 
-
+    @IBAction func signOut(_ sender: Any) {
+        do{
+            try Auth.auth().signOut()
+        }catch{
+            print(error.localizedDescription)
+        }
+        
+    }
+    
+    @IBAction func singAn(_ sender: Any) {
+        Auth.auth().signInAnonymously { authResult, error in
+            print(authResult?.user.uid)
+        }
+    }
+    
+    
+    
 }
 
